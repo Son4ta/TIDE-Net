@@ -1,73 +1,146 @@
-# TIDE-Net-CVPR2025
-Official implementation of "[TIDE-Net: Amplitude-Phase Disentanglement Model for Precipitation Nowcasting](https://openaccess.thecvf.com/content/CVPR2025/html/Lin_AlphaPre_Amplitude-Phase_Disentanglement_Model_for_Precipitation_Nowcasting_CVPR_2025_paper.html)"
+# Carbon-ECS: A Benchmark and a Physics-Decoupled Model for the East China Sea Carbon Flux
 
-![](framework.png)
+<div align="center">
+  <img src="https://placehold.co/800x300?text=TIDE-Net+Framework+Diagram" alt="TIDE-Net Framework">
+</div>
 
-## Introduction
+<p align="center">
+  <a href="https://github.com/son4ta/TIDE-Net/stargazers"><img src="https://img.shields.io/github/stars/son4ta/TIDE-Net?style=social" alt="GitHub Stars"></a>
+  <a href="https://github.com/son4ta/TIDE-Net/network/members"><img src="https://img.shields.io/github/forks/son4ta/TIDE-Net?style=social" alt="GitHub Forks"></a>
+  <a href="https://huggingface.co/spaces/[YOUR_HF_SPACE]"><img src="https://img.shields.io/badge/🤗-Hugging Face Demo-blue.svg" alt="Hugging Face Demo"></a>
+  <a href="[LINK_TO_PAPER]"><img src="https://img.shields.io/badge/📄-Paper-red.svg" alt="Paper"></a>
+</p>
 
-TIDE-Net is an amplitude-phase disentanglement model for precipitation nowcasting that separately learns positional and intensity changes by leveraging phase and amplitude variations in the frequency domain.
+This is the official implementation of **"Carbon-ECS: A Benchmark and a Physics-Decoupled Model for the East China Sea Carbon Flux"**. This work introduces TIDE-Net, a novel, physics-inspired forecasting model, and Carbon-ECS, a high-resolution, spatio-temporally complete benchmark dataset for sea-air CO₂ flux ($F_{CO_2}$) forecasting.
 
-This repository contains the part of training and inference code for using TIDE-Net to make predictions (5 --> 20) on SEVIR datasets. 
+## 🌟 Introduction
 
-## Code
+Forecasting sea-air CO₂ flux ($F_{CO_2}$) in coastal ecosystems like the East China Sea (ECS) is notoriously difficult due to complex biogeochemical processes and data limitations. TIDE-Net addresses this by decoupling two critical physical phenomena:
+1.  **Macro-scale Transport**: The large-scale movement of carbon sinks driven by ocean currents.
+2.  **Micro-scale Evolution**: The local generation, diffusion, and dissipation of fine-grained carbon structures.
 
-### Environment
+Our model leverages a dual-branch architecture to model these processes separately, leading to more physically consistent and accurate forecasts.
 
-```shell
-conda env create -f env.ymal
+## ✨ Key Features
+
+* **Carbon-ECS Dataset**: We provide the first 17-year, high-resolution (~1 km), and spatio-temporally complete benchmark dataset for $F_{CO_2}$ forecasting in the ECS.
+* **Physics-Decoupled Architecture**: TIDE-Net explicitly separates large-scale transport from local detail evolution for improved physical interpretability and performance.
+* **State-of-the-Art Performance**: Our model significantly outperforms existing methods in both short-term and medium-term forecasting tasks.
+
+## 🏗️ Model Architecture
+
+TIDE-Net is composed of three synergistic modules:
+
+1.  **Frequency Global Module (FGM)**: Predicts large-scale dynamics by operating in the frequency domain, modeling the evolution of amplitude and phase separately.
+2.  **Diffusion Local Refiner (DLR)**: Generates high-fidelity local details by iteratively refining fine-grained spatial structures using a diffusion-based process.
+3.  **Synergistic Fusion Head (SFH)**: Adaptively fuses the global forecast from FGM and the local details from DLR to produce the final, refined prediction.
+
+<div align="center">
+  <img src="https://placehold.co/700x400?text=Detailed+Architecture+Diagram" alt="TIDE-Net Architecture">
+</div>
+
+## 💾 Carbon-ECS Benchmark Dataset
+
+To overcome the limitations of spatio-temporal discontinuity in satellite data, we developed the Carbon-ECS dataset.
+
+| Specification       | Value                                        |
+| ------------------- | -------------------------------------------- |
+| Temporal Coverage   | 2003–2019 (204 months)                       |
+| Temporal Resolution | Monthly                                      |
+| Spatial Coverage    | Yangtze River Estuary & ECS shelf            |
+| Spatial Resolution  | ~1 km ($0.01^\circ$)                         |
+| Area                | ~8.5 $\times$ 10$^5$ km$^2$                  |
+| Data Quality        | Complete, denoised, and bias-corrected       |
+
+The dataset and its generation pipeline are available at [https://github.com/Son4ta/TIDE-Net](https://github.com/Son4ta/TIDE-Net).
+
+## 🚀 Getting Started
+
+### 1. Environment Setup
+
+We recommend using Conda to manage the environment.
+
+```bash
+# Clone the repository
+git clone [https://github.com/Son4ta/TIDE-Net.git](https://github.com/Son4ta/TIDE-Net.git)
+cd TIDE-Net
+
+# Create and activate the conda environment
+conda env create -f env.yaml
 conda activate tide-net
+
+
+Our code utilizes `accelerate` from Hugging Face for multi-GPU training and inference. You can configure it easily:
+
+```bash
+accelerate config
 ```
-<details close>
-<summary>Optional Accelerate Env</summary>
 
- We apply the `HuggingFace Accelerator` in our code to utilize multi-gpus. 
- One can config the accelerator env before runing code.
+### 2\. Download Pretrained Models
 
--  config the accelerate: `accelerate config`      
-- apply accelerate to run code: `accelerate launch *.py`
-</details>
+Download the pretrained model checkpoints and place them in the `./resources/` directory.
 
-### Resource
-pretrained checkpoint: [GoogleDrive](https://drive.google.com/file/d/1hzT2-biQhWuKTER8w1yoQx5Zh0nMYl80/view?usp=sharing)
+| Model                                | Download Link                                                                 |
+| ------------------------------------ | ----------------------------------------------------------------------------- |
+| TIDE-Net on Carbon-ECS (Short-Term)  | [Google Drive Placeholder](https://www.google.com/search?q=https://drive.google.com/file/d/%5BYOUR_FILE_ID%5D/view) |
+| TIDE-Net on Carbon-ECS (Medium-Term) | [Google Drive Placeholder](https://www.google.com/search?q=https://drive.google.com/file/d/%5BYOUR_FILE_ID%5D/view) |
 
+## ⚙️ Usage
 
-### Datasets
-All four datasets in our paper are from [DiffCast](https://github.com/DeminYu98/DiffCast).
-You can find the datasets as follows:
-- [SEVIR](https://nbviewer.org/github/MIT-AI-Accelerator/eie-sevir/blob/master/examples/SEVIR_Tutorial.ipynb)
-- [Metnet](https://meteofrance.github.io/meteonet/english/data/rain-radar/)
-- [Shanghai_Radar](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/2GKMQJ)
-- [CIKM_Radar](https://tianchi.aliyun.com/dataset/1085)
-
-### Evaluation
-Before evaluation, you need to [download](https://drive.google.com/file/d/1hzT2-biQhWuKTER8w1yoQx5Zh0nMYl80/view?usp=sharing) the pretrained checkpoint and put it in `resources/`
-```shell
-# Note: Config the dataset path in `dataset/get_dataset.py` before running.
-python run.py --eval --ckpt_milestone resources/TIDENet_sevir128.pt  
-```
 ### Training
-```shell
-python run.py
+
+To train TIDE-Net from scratch, run the following command. Make sure to configure the dataset path in `dataset/get_datasets.py`.
+
+```bash
+python run.py --exp_note "my_first_training_run"
 ```
-You can check the experimental configuration by
-```shell
+
+You can view all available training options and hyperparameters by running:
+
+```bash
 python run.py -h
 ```
 
-## Acknowledgement
+### Evaluation
 
-We refer to implementations of the following repositories and sincerely thank their contribution for the community:
-- [OpenSTL](https://github.com/chengtan9907/OpenSTL/blob/OpenSTL-Lightning/README.md)
-- [DiffCast](https://github.com/DeminYu98/DiffCast)
+To evaluate a pretrained model, use the `--eval` flag and specify the path to the checkpoint.
 
-## Citation
+```bash
+# Example for evaluating the medium-term model
+python run.py --eval --ckpt_milestone ./resources/[CHECKPOINT_NAME].pt
 ```
-@InProceedings{Lin2025TIDENet,
-    author    = {Lin, Kenghong and Zhang, Baoquan and Yu, Demin and Feng, Wenzhi and Chen, Shidong and Gao, Feifan and Li, Xutao and Ye, Yunming},
-    title     = {TIDE-Net: Amplitude-Phase Disentanglement Model for Precipitation Nowcasting},
-    booktitle = {Proceedings of the Computer Vision and Pattern Recognition Conference (CVPR)},
-    month     = {June},
-    year      = {2025},
-    pages     = {17841-17850}
+
+## 📊 Results
+
+TIDE-Net sets a new state-of-the-art on the Carbon-ECS benchmark. It consistently outperforms leading spatio-temporal forecasting models across multiple metrics.
+
+\<div align="center"\>
+\<img src="https://www.google.com/search?q=https://placehold.co/800x400%3Ftext%3DQualitative%2BResults%2BComparison" alt="Qualitative Results"\>
+\<p\>\<em\>Qualitative comparison of 6-month-ahead forecasts. TIDE-Net's predictions are visually more consistent with the ground truth.\</em\>\</p\>
+\</div\>
+
+## 🙏 Acknowledgements
+
+This project's foundational training and evaluation framework is adapted from [AlphaPre](https://github.com/linkenghong/AlphaPre). We are deeply grateful for their excellent open-source contribution to the community.
+
+We also thank the authors of the following repositories for their inspiration and for providing valuable codebases:
+
+  - [OpenSTL](https://github.com/chengtan9907/OpenSTL)
+  - [DiffCast](https://github.com/DeminYu98/DiffCast)
+
+## 📜 Citation
+
+If you find our work useful for your research, please consider citing our paper:
+
+```bibtex
+@inproceedings{fang2025carbon,
+  title={Carbon-ECS: A Benchmark and a Physics-Decoupled Model for the East China Sea Carbon Flux},
+  author={Fang, Chengjie and Zhao, Enyuan and Yao, Hongming and Sun, Ziyu and Gao, Di and Li, Yanbiao},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  year={2025},
+  note={Details to be updated upon publication.}
 }
+```
+
+```
 ```
