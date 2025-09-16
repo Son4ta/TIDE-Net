@@ -1,0 +1,32 @@
+Exps/
+resources/
+__pycache__/
+*.pyc
+*.pkl
+*.h5
+*.log
+*.tmp
+*.npy
+*.npz
+.DS_Store
+.idea/
+.vscode/
+logs/
+output/
+checkpoints/
+runs/
+data/
+# 临时文件
+*.swp
+*.swo
+# Jupyter Notebook 检查点
+.ipynb_checkpoints/
+cartopy_data/
+all_samples/
+归档/
+ECS_FCO2_monthly_1km_201611.nc
+loss.csv
+loss.py
+loss.csv
+loss3-3.csv
+wandb/
