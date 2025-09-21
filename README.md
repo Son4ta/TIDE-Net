@@ -136,7 +136,7 @@ If you find our work useful for your research, please consider citing our paper:
 @inproceedings{fang2025carbon,
   title={Carbon-ECS: A Benchmark and a Physics-Decoupled Model for the East China Sea Carbon Flux},
   author={Fang, Chengjie and Zhao, Enyuan and Yao, Hongming and Sun, Ziyu and Gao, Di and Li, Yanbiao},
-  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  booktitle={Preprint},
   year={2025},
   note={Details to be updated upon publication.}
 }
